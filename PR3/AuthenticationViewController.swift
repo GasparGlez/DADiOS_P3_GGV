@@ -50,7 +50,31 @@ class AuthenticationViewController: UIViewController, UITextFieldDelegate {
     }
     
     // BEGIN-UOC-2
+    // Initial focus on firstField to start entering the 4 digit code
+    // viewDidLoad() is the first method to be called when view controller loads
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        firstField.becomeFirstResponder()
+    }
     
+    // Event Editing Changed for every UITextField to go to next field when user fills every valur
+    @IBAction func textFieldEditingChanged(_ sender: UITextField) {
+        
+        switch sender {
+        case firstField:
+            secondField.becomeFirstResponder()
+        case secondField:
+            thirdField.becomeFirstResponder()
+        case thirdField:
+            fourthField.becomeFirstResponder()
+        case fourthField:
+            fourthField.resignFirstResponder()
+            // Call to authentication function like "Next" button
+            doAuthentication()
+        default:
+            sender.resignFirstResponder()
+        }
+    }
     // END-UOC-2
     
     func doAuthentication() {
