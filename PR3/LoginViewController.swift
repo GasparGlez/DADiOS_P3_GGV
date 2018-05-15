@@ -63,6 +63,14 @@ class LoginViewController: UIViewController {
         
         self.view.backgroundColor = colorOfTheHour
         self.welcomeLabel.text = messageOfTheHour
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     @IBAction func unwindToLogin(for unwindSegue: UIStoryboardSegue, towardsViewController subsequentVC: UIViewController) {
