@@ -71,7 +71,6 @@ class AuthenticationViewController: UIViewController, UITextFieldDelegate {
     
     // Event Editing Changed for every UITextField to go to next field when user fills every valur
     @IBAction func textFieldEditingChanged(_ sender: UITextField) {
-        
         switch sender {
         case firstField:
             secondField.becomeFirstResponder()
