@@ -505,10 +505,17 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="backButtonConstraint" destination="yKN-4m-OHk" id="nXV-sC-VKS"/>
                         <outlet property="firstField" destination="0Nb-Hl-lHc" id="LwZ-9q-KZZ"/>
+                        <outlet property="firstLabel" destination="nER-Uv-rTV" id="IMy-oc-RVo"/>
                         <outlet property="fourthField" destination="P5J-xy-r6k" id="eam-M2-mPf"/>
+                        <outlet property="fourthLabel" destination="cLK-qn-WUx" id="VTu-zf-VP4"/>
+                        <outlet property="nextButtonConstraint" destination="fiI-Il-aZV" id="6ML-pI-1Ww"/>
                         <outlet property="secondField" destination="1kT-Bg-b3C" id="dg4-9H-T8Z"/>
+                        <outlet property="secondLabel" destination="0JQ-OG-vI0" id="3Ph-Pu-dU1"/>
                         <outlet property="thirdField" destination="Eqh-Oh-sDc" id="Daj-5j-HGK"/>
+                        <outlet property="thirdLabel" destination="lOS-qe-FXh" id="Vq2-Q4-sGh"/>
+                        <outlet property="upperLabelConstraint" destination="Goa-6D-xts" id="tLa-dK-bDf"/>
                         <segue destination="lnl-au-HBQ" kind="show" identifier="SegueToMainNavigation" id="wWO-IB-d6h"/>
                     </connections>
                 </viewController>
