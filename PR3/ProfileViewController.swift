@@ -67,23 +67,27 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         switch textField {
+            
+        // Check incomeField textField has a valid format amount (example: [-]XXXX,YY)
         case incomeField:
-            let incomeFieldText = incomeField.text ?? ""
-            // User pressed the delete-key to remove a character, this is always valid, return true to allow change
-            if incomeFieldText=="" { return true }
-            
-            // Build the full current string: TextField right now only contains the
-            // previous valid value.
-            // Can't just concat the two strings because the user might've moved the
-            // cursor and delete something in the middle.
-            let replacementText = (incomeFieldText as NSString).replacingCharacters(in: range, with: string)
-            
-            // Use new string extensions (Utils class) to check if the string is a valid income and only has the specified amount of decimal places.
-            return replacementText.isValidIncome(maxDecimalPlaces: 2)
-        default: return true
+
+            let textFieldContent = textField.text ?? ""
+            // If It's the first character and It's a "-" then is a "valid" number part
+            if  (textFieldContent == "" && string=="-") { return true }
+            // Else
+            else {
+                // If we have a character typed (not a first "-"). Concatenate and check
+                if (textFieldContent != "" || string != "") {
+                    let resultString = textFieldContent + string
+                    return resultString.isValidIncome(maxDecimalPlaces: 2)
+                }
+                // Else (no content)
+                return true
+            }
+        default:
+            return true
         }
     }
-    
     // END-UOC-4
     
     

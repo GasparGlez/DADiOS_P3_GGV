@@ -41,18 +41,15 @@ extension UIColor {
 // GGV Function to check a valid amount formatted
 extension String {
     func isValidIncome(maxDecimalPlaces: Int) -> Bool {
-        // Use NumberFormatter to check if we can turn the string into a number
-        // and to get the locale specific decimal separator.
+        // We use a NumberFormatter to check if we can turn the string into a number and to get the locale specific decimal separator.
         let formatter = NumberFormatter()
-        formatter.allowsFloats = true // Default is true, be explicit anyways
-        let decimalSeparator = formatter.decimalSeparator ?? ","  // Gets the locale specific decimal separator. If for some reason there is none we assume "," is used as separator.
+        formatter.allowsFloats = true // Default true
+        let decimalSeparator = formatter.decimalSeparator ?? ","  // Gets the locale specific decimal separator. Anyway, we assume "," is used as separator.
         
-        // Check if we can create a valid number. (The formatter creates a NSNumber, but
-        // every NSNumber is a valid double, so we're good!)
-        
+        // Check if we can create a valid number. (The formatter creates a NSNumber)
         if formatter.number(from: self) != nil {
             
-            let number = formatter.number(from: self) ?? -1.00
+            //let number = formatter.number(from: self) ?? -1.00
             
             // Split our string at the decimal separator
             let split = self.components(separatedBy: decimalSeparator)
@@ -66,8 +63,8 @@ extension String {
             
             // Finally check if we're <= the allowed digits
             let checkDecimalPlaces = digits.count <= maxDecimalPlaces
-            let checkPositiveNumber = !(number.floatValue.isLess(than: 0.00))
-            return checkDecimalPlaces && checkPositiveNumber
+            //let checkPositiveNumber = !(number.floatValue.isLess(than: 0.00))
+            return checkDecimalPlaces //&& checkPositiveNumber
         }
         
         return false // couldn't turn string into a valid number
