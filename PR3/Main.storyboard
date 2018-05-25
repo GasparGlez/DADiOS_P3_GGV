@@ -651,7 +651,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="169.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ugq-9o-ZVf">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Ugq-9o-ZVf">
                                                     <rect key="frame" x="127.5" y="8" width="120" height="120"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="120" id="6oS-CQ-9ZF"/>
@@ -661,6 +661,9 @@
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qwg-Zf-eby">
                                                     <rect key="frame" x="115" y="136" width="144" height="30"/>
                                                     <state key="normal" title="Update profile image"/>
+                                                    <connections>
+                                                        <action selector="takePicture:" destination="0e5-fh-aqL" eventType="touchUpInside" id="Q7y-yU-iuT"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
@@ -956,7 +959,7 @@
                         <outlet property="incomeField" destination="hJ6-ea-2LN" id="YJU-J9-AOr"/>
                         <outlet property="nameField" destination="O9Y-Jc-rPf" id="iHK-Ac-CBs"/>
                         <outlet property="occupationField" destination="zsN-MI-pH7" id="Ock-UO-dja"/>
-                        <outlet property="profileImage" destination="Ugq-9o-ZVf" id="k82-RX-JKT"/>
+                        <outlet property="profileImage" destination="Ugq-9o-ZVf" id="tze-qe-VQZ"/>
                         <outlet property="streetAddressField" destination="g3s-40-B6U" id="pSa-Rd-NLE"/>
                         <outlet property="surnameField" destination="v8G-Pn-P7O" id="y5H-Iy-VGh"/>
                     </connections>

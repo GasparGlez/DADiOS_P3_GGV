@@ -7,11 +7,11 @@
 
 import UIKit
 
-class ProfileViewController: UITableViewController, UITextFieldDelegate {
+class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+   
     var currentProfile: Profile?
     
     @IBOutlet weak var profileImage: UIImageView!
-
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var surnameField: UITextField!
     @IBOutlet weak var streetAddressField: UITextField!
@@ -88,13 +88,66 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate {
             return true
         }
     }
+    
+    //XPP-BEGIN - Button "Done" for number pad
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        
+        if (textField == incomeField) {
+            let numberToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 320, height: 50))
+            numberToolbar.barStyle = .default
+            let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+            let button = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(doneWithNumberPad))
+            numberToolbar.items = [spacer, button]
+            numberToolbar.sizeToFit()
+            incomeField.inputAccessoryView = numberToolbar
+        }
+    }
+    
+    @objc func doneWithNumberPad(sender: UIBarButtonItem) {
+        incomeField.resignFirstResponder()
+    }
+    
+    //XPP-END
+    
     // END-UOC-4
     
     
     // BEGIN-UOC-5
-    //    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-    //        saveProfileImage(image)
-    //    }
+    
+    
+    @IBAction func takePicture(_ sender: AnyObject) {
+        
+        let imagePicker = UIImagePickerController()
+        
+        // If the device has a camera (not in simulator), take a picture, else, pick from photo library
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            imagePicker.sourceType = .camera
+        } else {
+            imagePicker.sourceType = .photoLibrary
+        }
+        
+        imagePicker.delegate = self
+        
+        // Place image picker on the screen
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
+        // Get picked image from info dictionary
+        let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+
+        // Image to screen with view scaling (aspect fit)
+        profileImage.contentMode = .scaleAspectFit
+        profileImage.image = image
+        
+        
+        // Take image picker off the screen - you must call this dismiss method
+        dismiss(animated: true, completion: nil)
+        
+        //saveProfileImage(image)
+        
+        }
     // END-UOC-5
     
     // BEGIN-UOC-6
