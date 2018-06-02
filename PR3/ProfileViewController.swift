@@ -145,18 +145,43 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
         // Take image picker off the screen - you must call this dismiss method
         dismiss(animated: true, completion: nil)
         
-        //saveProfileImage(image)
+        // Save profile image
+        saveProfileImage(image)
         
         }
     // END-UOC-5
     
     // BEGIN-UOC-6
-    func loadProfileImage() -> UIImage? {
-        return UIImage(named: "EmptyProfile.png")
+
+    // Function to locate the user's documents directory where we can save app files
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0]
     }
     
-    func saveProfileImage(_ image: UIImage) {
+    func loadProfileImage() -> UIImage? {
         
+        // declare image location
+        let imagePath = getDocumentsDirectory().appendingPathComponent("profile_image.png").path
+        let imageUrl: URL = URL(fileURLWithPath: imagePath)
+        
+        // Check if the image is stored already. If don't, load "EmptyProfile.png"
+        if FileManager.default.fileExists(atPath: imagePath),
+            let imageData: Data = try? Data(contentsOf: imageUrl),
+            let image: UIImage = UIImage(data: imageData, scale: UIScreen.main.scale) {
+            return image
+        }
+        else {
+            return UIImage(named: "EmptyProfile.png")
+        }
+    }
+    
+    // Save image using UIImagePNGRepresentation
+    func saveProfileImage(_ image: UIImage) {
+        if let data = UIImagePNGRepresentation(image) {
+            let filename = getDocumentsDirectory().appendingPathComponent("profile_image.png")
+            try? data.write(to: filename)
+        }
     }
     // END-UOC-6
     
