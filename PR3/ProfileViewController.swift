@@ -11,6 +11,12 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
    
     var currentProfile: Profile?
     
+    //GGV Sobra
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    //Fin GGV Sobra
+    
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var surnameField: UITextField!
@@ -89,7 +95,8 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
         }
     }
     
-    //XPP-BEGIN - Button "Done" for number pad
+    // XPP-BEGIN - Button "Done" for number pad
+    // ¡¡ Thxs Xavier :) !!
     func textFieldDidBeginEditing(_ textField: UITextField) {
         
         if (textField == incomeField) {
@@ -107,14 +114,11 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
         incomeField.resignFirstResponder()
     }
     
-    //XPP-END
-    
+    // XPP-END
     // END-UOC-4
     
     
     // BEGIN-UOC-5
-    
-    
     @IBAction func takePicture(_ sender: AnyObject) {
         
         let imagePicker = UIImagePickerController()
@@ -159,9 +163,10 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
         return paths[0]
     }
     
+    // Load image from filesystem
     func loadProfileImage() -> UIImage? {
         
-        // declare image location
+        // Declare image location
         let imagePath = getDocumentsDirectory().appendingPathComponent("profile_image.png").path
         let imageUrl: URL = URL(fileURLWithPath: imagePath)
         
@@ -186,13 +191,48 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
     // END-UOC-6
     
     // BEGIN-UOC-7
+    
+    @IBAction func saveProfile(_ sender: Any) {
+        
+        let profile = Profile(name: nameField.text ?? "", surname: surnameField.text ?? "", streetAddress: streetAddressField.text ?? "", city: cityField.text ?? "", occupation: occupationField.text ?? "", company: companyField.text ?? "", income: Int(incomeField.text ?? "0") ?? 0)
+        saveProfileData(profile)
+    }
+    
     func saveProfileData(_ currentProfile: Profile) {
         
+        //
+        let userDefaults = UserDefaults.standard
+        let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: currentProfile)
+        userDefaults.set(encodedData, forKey: "currentProfile")
+        userDefaults.synchronize()
+        //
+        
+        let filePath = getDocumentsDirectory().appendingPathComponent("profile_data").path
+        NSKeyedArchiver.archiveRootObject(currentProfile, toFile: filePath)
+
     }
     
     func loadProfileData() -> Profile {
-        let profile = Profile(name: "Sherlock", surname: "Holmes", streetAddress: "221B Baker Street", city: "London", occupation: "Detective", company: "Self-employed", income: 500)
-        return profile
+        //let profile = Profile(name: "Sherlock", surname: "Holmes", streetAddress: "221B Baker Street", city: "London", occupation: "Detective", company: "Self-employed", income: 500)
+        /*
+        let userDefaults = UserDefaults.standard
+        let decoded  = userDefaults.object(forKey: "currentProfile") as! Data
+        let profile = NSKeyedUnarchiver.unarchiveObject(with: decoded) as? Profile ?? Profile(name: "", surname: "", streetAddress: "", city: "", occupation: "", company: "", income: 0)
+        */
+        
+        let filePath = getDocumentsDirectory().appendingPathComponent("profile_data").path
+        if let savedProfile = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) as? Profile {
+            
+            let userDefaults = UserDefaults.standard
+            let decodedData  = userDefaults.object(forKey: "currentProfile") as! Data
+            self.currentProfile = NSKeyedUnarchiver.unarchiveObject(with: decodedData) as? Profile ?? Profile(name: "", surname: "", streetAddress: "", city: "", occupation: "", company: "", income: 0)
+            
+            return savedProfile
+        }
+        else {
+            return Profile(name: "", surname: "", streetAddress: "", city: "", occupation: "", company: "", income: 0)
+        }
+    
     }
     // END-UOC-7
 }
