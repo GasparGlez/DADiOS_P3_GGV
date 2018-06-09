@@ -11,12 +11,6 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
    
     var currentProfile: Profile?
     
-    //GGV Sobra
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    //Fin GGV Sobra
-    
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var nameField: UITextField!
     @IBOutlet weak var surnameField: UITextField!
@@ -34,6 +28,15 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
         
         currentProfile = loadProfileData()
         
+        // GGV Set values to outlets
+        nameField.text = currentProfile?.name
+        surnameField.text = currentProfile?.surname
+        streetAddressField.text = currentProfile?.streetAddress
+        cityField.text = currentProfile?.city
+        occupationField.text = currentProfile?.occupation
+        companyField.text = currentProfile?.company
+        incomeField.text = String(currentProfile?.income ?? 0)
+
         // GGV nameField first position field
         nameField.becomeFirstResponder()
         
@@ -71,32 +74,26 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
         return true
     }
     
+    // Function to check if a string is a valid int to validate income field value
+    func isStringAnInt(string: String) -> Bool {
+        return Int(string) != nil
+    }
+    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         switch textField {
             
         // Check incomeField textField has a valid format amount (example: [-]XXXX,YY)
         case incomeField:
-
-            let textFieldContent = textField.text ?? ""
-            // If It's the first character and It's a "-" then is a "valid" number part
-            if  (textFieldContent == "" && string=="-") { return true }
-            // Else
-            else {
-                // If we have a character typed (not a first "-"). Concatenate and check
-                if (textFieldContent != "" || string != "") {
-                    let resultString = textFieldContent + string
-                    return resultString.isValidIncome(maxDecimalPlaces: 2)
-                }
-                // Else (no content)
-                return true
-            }
+            let validIncomeFieldStringEntered = isStringAnInt(string: string) || string == ""
+            // Return true if user entered a number character or delete key (string == "")
+            return validIncomeFieldStringEntered
         default:
             return true
         }
     }
     
     // XPP-BEGIN - Button "Done" for number pad
-    // ¡¡ Thxs Xavier :) !!
+    // -------------------- ¡¡ Thxs Xavier for the code :) !! --------------------
     func textFieldDidBeginEditing(_ textField: UITextField) {
         
         if (textField == incomeField) {
@@ -113,8 +110,8 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
     @objc func doneWithNumberPad(sender: UIBarButtonItem) {
         incomeField.resignFirstResponder()
     }
-    
     // XPP-END
+    
     // END-UOC-4
     
     
@@ -192,41 +189,29 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
     
     // BEGIN-UOC-7
     
+    // Construct URL to the profile file
+    let profileArchiveURL: URL = {
+        let documentsDirectories = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentDirectory = documentsDirectories.first!
+        return documentDirectory.appendingPathComponent("profile.archive")
+    }()
+    
     @IBAction func saveProfile(_ sender: Any) {
         
         let profile = Profile(name: nameField.text ?? "", surname: surnameField.text ?? "", streetAddress: streetAddressField.text ?? "", city: cityField.text ?? "", occupation: occupationField.text ?? "", company: companyField.text ?? "", income: Int(incomeField.text ?? "0") ?? 0)
         saveProfileData(profile)
+        Utils.show(Message: "Saved succesfully", WithTitle: "Profile Information", InViewController: self)
     }
     
     func saveProfileData(_ currentProfile: Profile) {
         
-        //
-        let userDefaults = UserDefaults.standard
-        let encodedData: Data = NSKeyedArchiver.archivedData(withRootObject: currentProfile)
-        userDefaults.set(encodedData, forKey: "currentProfile")
-        userDefaults.synchronize()
-        //
-        
-        let filePath = getDocumentsDirectory().appendingPathComponent("profile_data").path
-        NSKeyedArchiver.archiveRootObject(currentProfile, toFile: filePath)
-
+        NSKeyedArchiver.archiveRootObject(currentProfile, toFile: profileArchiveURL.path)
     }
     
     func loadProfileData() -> Profile {
-        //let profile = Profile(name: "Sherlock", surname: "Holmes", streetAddress: "221B Baker Street", city: "London", occupation: "Detective", company: "Self-employed", income: 500)
-        /*
-        let userDefaults = UserDefaults.standard
-        let decoded  = userDefaults.object(forKey: "currentProfile") as! Data
-        let profile = NSKeyedUnarchiver.unarchiveObject(with: decoded) as? Profile ?? Profile(name: "", surname: "", streetAddress: "", city: "", occupation: "", company: "", income: 0)
-        */
         
-        let filePath = getDocumentsDirectory().appendingPathComponent("profile_data").path
-        if let savedProfile = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) as? Profile {
-            
-            let userDefaults = UserDefaults.standard
-            let decodedData  = userDefaults.object(forKey: "currentProfile") as! Data
-            self.currentProfile = NSKeyedUnarchiver.unarchiveObject(with: decodedData) as? Profile ?? Profile(name: "", surname: "", streetAddress: "", city: "", occupation: "", company: "", income: 0)
-            
+        // Return the saved profile or a empty profile if there is not a saved profile
+        if let savedProfile = NSKeyedUnarchiver.unarchiveObject(withFile: profileArchiveURL.path) as? Profile {
             return savedProfile
         }
         else {
