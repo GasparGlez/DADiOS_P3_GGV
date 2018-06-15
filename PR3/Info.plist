@@ -34,5 +34,7 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>PR3 app needs access to the camera to enhance your user experience.</string>
 </dict>
 </plist>

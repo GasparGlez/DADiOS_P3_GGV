@@ -69,7 +69,7 @@ class AuthenticationViewController: UIViewController, UITextFieldDelegate {
         firstField.becomeFirstResponder()
     }
     
-    // Event Editing Changed for every UITextField to go to next field when user fills every valur
+    // Event Editing Changed for every UITextField to go to next field when user fills every value
     @IBAction func textFieldEditingChanged(_ sender: UITextField) {
         switch sender {
         case firstField:
@@ -107,9 +107,11 @@ class AuthenticationViewController: UIViewController, UITextFieldDelegate {
                             self.updateAlphaViews()
                             self.updateLabelConstraints()
                             self.view.layoutIfNeeded()
+                            },
+                           completion: { finished in
+                            // Perform segue after animation
+                            self.performSegue (withIdentifier: "SegueToMainNavigation", sender: self)
                             })
-            // Perform segue after animation
-            performSegue (withIdentifier: "SegueToMainNavigation", sender: self)
             // END-UOC-3
         } else {
             let errorMessage = "Sorry, the entered code is not valid"

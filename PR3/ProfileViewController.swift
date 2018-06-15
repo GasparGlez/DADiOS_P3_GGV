@@ -51,7 +51,6 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
     }
     
     // BEGIN-UOC-4
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         switch textField {
         case nameField:
@@ -93,7 +92,7 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
     }
     
     // XPP-BEGIN - Button "Done" for number pad
-    // -------------------- ¡¡ Thxs Xavier for the code :) !! --------------------
+    // -------------------- ¡¡ Thanks for the code Xavier :) !! --------------------
     func textFieldDidBeginEditing(_ textField: UITextField) {
         
         if (textField == incomeField) {
@@ -111,7 +110,6 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
         incomeField.resignFirstResponder()
     }
     // XPP-END
-    
     // END-UOC-4
     
     
@@ -120,7 +118,7 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
         
         let imagePicker = UIImagePickerController()
         
-        // If the device has a camera (not in simulator), take a picture, else, pick from photo library
+        // If the device has a camera (not in simulator), take a picture, else, pick it from the photo library
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             imagePicker.sourceType = .camera
         } else {
@@ -153,7 +151,6 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
     // END-UOC-5
     
     // BEGIN-UOC-6
-
     // Function to locate the user's documents directory where we can save app files
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -188,7 +185,6 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
     // END-UOC-6
     
     // BEGIN-UOC-7
-    
     // Construct URL to the profile file
     let profileArchiveURL: URL = {
         let documentsDirectories = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
@@ -197,27 +193,25 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
     }()
     
     @IBAction func saveProfile(_ sender: Any) {
-        
+        // Profile values from outlets
         let profile = Profile(name: nameField.text ?? "", surname: surnameField.text ?? "", streetAddress: streetAddressField.text ?? "", city: cityField.text ?? "", occupation: occupationField.text ?? "", company: companyField.text ?? "", income: Int(incomeField.text ?? "0") ?? 0)
+        // Save profile
         saveProfileData(profile)
         Utils.show(Message: "Saved succesfully", WithTitle: "Profile Information", InViewController: self)
     }
     
     func saveProfileData(_ currentProfile: Profile) {
-        
         NSKeyedArchiver.archiveRootObject(currentProfile, toFile: profileArchiveURL.path)
     }
     
     func loadProfileData() -> Profile {
-        
         // Return the saved profile or a empty profile if there is not a saved profile
         if let savedProfile = NSKeyedUnarchiver.unarchiveObject(withFile: profileArchiveURL.path) as? Profile {
             return savedProfile
         }
         else {
-            return Profile(name: "", surname: "", streetAddress: "", city: "", occupation: "", company: "", income: 0)
+            return Profile()
         }
-    
     }
     // END-UOC-7
 }
