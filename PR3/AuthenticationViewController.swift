@@ -13,7 +13,7 @@ class AuthenticationViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var thirdField: UITextField!
     @IBOutlet weak var fourthField: UITextField!
     
-    // BEGIN UOC3 - Outlets
+    // BEGIN UOC3 - Outlets & constraints
     @IBOutlet weak var firstLabel: UILabel!
     @IBOutlet weak var secondLabel: UILabel!
     @IBOutlet weak var thirdLabel: UILabel!
@@ -21,7 +21,7 @@ class AuthenticationViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var upperLabelConstraint: NSLayoutConstraint!
     @IBOutlet weak var backButtonConstraint: NSLayoutConstraint!
     @IBOutlet weak var nextButtonConstraint: NSLayoutConstraint!
-    // END UOC3 - Outlets
+    // END UOC3 - Outlets & constraints
     
     
     

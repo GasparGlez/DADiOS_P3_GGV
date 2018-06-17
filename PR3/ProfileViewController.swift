@@ -109,7 +109,7 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
     @objc func doneWithNumberPad(sender: UIBarButtonItem) {
         incomeField.resignFirstResponder()
     }
-    // XPP-END
+    // XPP-END - Button "Done" for number pad
     // END-UOC-4
     
     
@@ -117,8 +117,9 @@ class ProfileViewController: UITableViewController, UITextFieldDelegate, UINavig
     @IBAction func takePicture(_ sender: AnyObject) {
         
         let imagePicker = UIImagePickerController()
-        
         // If the device has a camera (not in simulator), take a picture, else, pick it from the photo library
+        // Added NSCameraUsageDescription and NSPhotoLibraryAddUsageDescription keys in Info.plist file with the reasons for requesting access to camera and photo library respectively
+        
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             imagePicker.sourceType = .camera
         } else {
